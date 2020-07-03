@@ -1,0 +1,3 @@
+[submodule "modules/open_tabletop_import_module"]
+	path = modules/open_tabletop_import_module
+	url = https://github.com/drwhut/open_tabletop_import_module.git

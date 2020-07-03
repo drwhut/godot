@@ -322,6 +322,7 @@ void DocData::generate(bool p_basic_types) {
 
 			bool found_type = false;
 			if (getter != StringName()) {
+#ifdef DEBUG_METHODS_ENABLED
 				MethodBind *mb = ClassDB::get_method(name, getter);
 				if (mb) {
 					PropertyInfo retinfo = mb->get_return_info();
@@ -344,6 +345,7 @@ void DocData::generate(bool p_basic_types) {
 						prop.type = Variant::get_type_name(retinfo.type);
 					}
 				}
+#endif
 
 				setters_getters.insert(getter);
 			}

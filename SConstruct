@@ -440,9 +440,9 @@ if selected_platform in platform_list:
         suffix = "." + selected_platform
 
     if env["target"] == "release":
-        if env["tools"]:
-            print("Tools can only be built with targets 'debug' and 'release_debug'.")
-            sys.exit(255)
+        #if env["tools"]:
+            #print("Tools can only be built with targets 'debug' and 'release_debug'.")
+            #sys.exit(255)
         suffix += ".opt"
         env.Append(CPPDEFINES=["NDEBUG"])
 

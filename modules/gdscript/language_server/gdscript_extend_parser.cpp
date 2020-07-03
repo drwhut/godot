@@ -58,6 +58,7 @@ void ExtendGDScriptParser::update_diagnostics() {
 		diagnostics.push_back(diagnostic);
 	}
 
+#if DEBUG_ENABLED
 	const List<GDScriptWarning> &warnings = get_warnings();
 	for (const List<GDScriptWarning>::Element *E = warnings.front(); E; E = E->next()) {
 		const GDScriptWarning &warning = E->get();
@@ -78,6 +79,7 @@ void ExtendGDScriptParser::update_diagnostics() {
 		diagnostic.range = range;
 		diagnostics.push_back(diagnostic);
 	}
+#endif
 }
 
 void ExtendGDScriptParser::update_symbols() {

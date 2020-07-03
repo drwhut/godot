@@ -3316,6 +3316,8 @@ Error GDScriptLanguage::lookup_code(const String &p_code, const String &p_symbol
 		return ERR_CANT_RESOLVE;
 	}
 
+#ifdef DEBUG_ENABLED
+
 	GDScriptCompletionContext context;
 	context._class = parser.get_completion_class();
 	context.function = parser.get_completion_function();
@@ -3516,6 +3518,8 @@ Error GDScriptLanguage::lookup_code(const String &p_code, const String &p_symbol
 		default: {
 		}
 	}
+
+#endif
 
 	return ERR_CANT_RESOLVE;
 }

@@ -90,8 +90,10 @@ bool EditorResourcePreviewGenerator::can_generate_small_preview() const {
 void EditorResourcePreviewGenerator::_bind_methods() {
 
 	ClassDB::add_virtual_method(get_class_static(), MethodInfo(Variant::BOOL, "handles", PropertyInfo(Variant::STRING, "type")));
+#ifdef DEBUG_METHODS_ENABLED
 	ClassDB::add_virtual_method(get_class_static(), MethodInfo(CLASS_INFO(Texture), "generate", PropertyInfo(Variant::OBJECT, "from", PROPERTY_HINT_RESOURCE_TYPE, "Resource"), PropertyInfo(Variant::VECTOR2, "size")));
 	ClassDB::add_virtual_method(get_class_static(), MethodInfo(CLASS_INFO(Texture), "generate_from_path", PropertyInfo(Variant::STRING, "path", PROPERTY_HINT_FILE), PropertyInfo(Variant::VECTOR2, "size")));
+#endif	
 	ClassDB::add_virtual_method(get_class_static(), MethodInfo(Variant::BOOL, "generate_small_preview_automatically"));
 	ClassDB::add_virtual_method(get_class_static(), MethodInfo(Variant::BOOL, "can_generate_small_preview"));
 }
