@@ -32,8 +32,11 @@
 #include "core/image.h"
 #include "core/io/config_file.h"
 #include "core/io/image_loader.h"
+#include "core/io/resource_saver.h"
+#ifdef TOOLS_ENABLED
 #include "editor/editor_file_system.h"
 #include "editor/editor_node.h"
+#endif
 #include "scene/resources/bit_map.h"
 #include "scene/resources/texture.h"
 
