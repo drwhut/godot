@@ -32,9 +32,9 @@
 
 #include "resource_importer_texture.h"
 
-#include "core/project_settings.h"
 #include "core/io/config_file.h"
 #include "core/io/image_loader.h"
+#include "core/project_settings.h"
 #ifdef TOOLS_ENABLED
 #include "editor/editor_file_system.h"
 #include "editor/editor_node.h"

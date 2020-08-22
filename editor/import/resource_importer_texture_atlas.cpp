@@ -104,6 +104,7 @@ Error ResourceImporterTextureAtlas::import(const String &p_source_file, const St
 	return OK;
 }
 
+#ifdef TOOLS_ENABLED
 static void _plot_triangle(Vector2 *vertices, const Vector2 &p_offset, bool p_transposed, Ref<Image> p_image, const Ref<Image> &p_src_image) {
 
 	int width = p_image->get_width();
@@ -194,6 +195,7 @@ static void _plot_triangle(Vector2 *vertices, const Vector2 &p_offset, bool p_tr
 			xt += dx_low;
 	}
 }
+#endif
 
 Error ResourceImporterTextureAtlas::import_group_file(const String &p_group_file, const Map<String, Map<StringName, Variant> > &p_source_file_options, const Map<String, String> &p_base_paths) {
 
