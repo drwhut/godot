@@ -57,7 +57,9 @@ jobs:
           mkdir -p bin/osx_template.app/Contents/MacOS
           cp bin/godot.osx.opt.universal bin/osx_template.app/Contents/MacOS/godot_osx_release.64
           chmod +x bin/osx_template.app/Contents/MacOS/godot_osx_release.64
-          zip -r bin/osx.zip bin/osx_template.app
+          cd bin/
+          zip -r osx.zip osx_template.app
+          cd ..
           ls -l bin/
 
       - uses: actions/upload-artifact@v2
