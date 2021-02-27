@@ -55,8 +55,9 @@ jobs:
           lipo -create bin/godot.osx.opt.x86_64 bin/godot.osx.opt.arm64 -output bin/godot.osx.opt.universal
           cp -r misc/dist/osx_template.app bin/osx_template.app
           mkdir -p bin/osx_template.app/Contents/MacOS
-          cp bin/godot.osx.opt.universal bin/osx_template.app/Contents/MacOS/Godot
-          chmod +x bin/osx_template.app/Contents/MacOS/Godot
+          cp bin/godot.osx.opt.universal bin/osx_template.app/Contents/MacOS/godot_osx_release.64
+          chmod +x bin/osx_template.app/Contents/MacOS/godot_osx_release.64
+          zip -r bin/osx.zip bin/osx_template.app
           ls -l bin/
 
       - uses: actions/upload-artifact@v2
