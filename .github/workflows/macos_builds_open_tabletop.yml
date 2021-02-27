@@ -52,7 +52,7 @@ jobs:
         run: |
           scons target=release tools=no arch=x86_64
           scons target=release tools=no arch=arm64
-          lipo -create bin/godot.osx.x86_64 bin/godot.osx.arm64 -output bin/godot.osx.universal
+          lipo -create bin/godot.osx.opt.x86_64 bin/godot.osx.opt.arm64 -output bin/godot.osx.opt.universal
           cp -r misc/dist/osx_template.app bin/osx_template.app
           mkdir -p bin/osx_template.app/Contents/MacOS
           cp bin/godot.osx.opt.universal bin/osx_template.app/Contents/MacOS/Godot
