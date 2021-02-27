@@ -64,9 +64,7 @@ jobs:
         env:
           SCONS_CACHE: ${{github.workspace}}/.scons_cache/
         run: |
-          scons target=release tools=no bits=64 use_lto=yes
-          ls -l bin/
-          strip bin/godot.x11.opt.64
+          scons target=release tools=no bits=64 production=yes
           ls -l bin/
 
       - uses: actions/upload-artifact@v2

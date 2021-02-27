@@ -50,8 +50,12 @@ jobs:
         env:
           SCONS_CACHE: ${{github.workspace}}/.scons_cache/
         run: |
-          scons target=release tools=no arch=x86_64
-          scons target=release tools=no arch=arm64
+          scons target=release tools=no arch=x86_64 production=yes
+          scons target=release tools=no arch=arm64 production=yes
+          ls -l bin/
+      
+      - name: Creating universal template
+        run: |
           lipo -create bin/godot.osx.opt.x86_64 bin/godot.osx.opt.arm64 -output bin/godot.osx.opt.universal
           cp -r misc/dist/osx_template.app bin/osx_template.app
           mkdir -p bin/osx_template.app/Contents/MacOS
