@@ -53,7 +53,7 @@ jobs:
           scons target=release tools=no arch=x86_64 production=yes
           scons target=release tools=no arch=arm64 production=yes
           ls -l bin/
-      
+
       - name: Creating universal template
         run: |
           lipo -create bin/godot.osx.opt.x86_64 bin/godot.osx.opt.arm64 -output bin/godot.osx.opt.universal
