@@ -9,7 +9,7 @@ env:
 
 jobs:
   linux-64:
-    runs-on: "ubuntu-18.04"
+    runs-on: "ubuntu-20.04"
     name: 64-bit Headless
 
     steps:
@@ -21,7 +21,7 @@ jobs:
       - name: Make apt sources.list use the default Ubuntu repositories
         run: |
           sudo rm -f /etc/apt/sources.list.d/*
-          sudo cp -f misc/ci/sources.bionic.list /etc/apt/sources.list
+          sudo cp -f misc/ci/sources.list /etc/apt/sources.list
           sudo apt-get update
 
       # Install all packages (except scons)
