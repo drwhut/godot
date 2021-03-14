@@ -563,16 +563,19 @@ void RigidBody::_notification(int p_what) {
 			if (Engine::get_singleton()->is_editor_hint() == false) {
 				set_process_internal(true);
 				frame_interpolator.reset(get_global_transform());
-			} break;
+			}
+			break;
 #ifdef TOOLS_ENABLED
 		case NOTIFICATION_ENTER_TREE:
 			if (Engine::get_singleton()->is_editor_hint()) {
 				set_notify_local_transform(true);
-			} break;
+			}
+			break;
 		case NOTIFICATION_LOCAL_TRANSFORM_CHANGED:
 			if (Engine::get_singleton()->is_editor_hint()) {
 				update_configuration_warning();
-			} break;
+			}
+			break;
 #endif
 	}
 }

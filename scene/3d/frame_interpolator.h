@@ -1,6 +1,3 @@
-// This work has been kindly sponsored by IMVU.
-// Version 3.1: faster and better recovering algorithm, more optimized, supports a dynamic physics frame.
-
 /*************************************************************************/
 /*  frame_interpolator.h                                                 */
 /*************************************************************************/
@@ -30,6 +27,9 @@
 /* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE     */
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
+
+// This work has been kindly sponsored by IMVU.
+// Version 3.1: faster and better recovering algorithm, more optimized, supports a dynamic physics frame.
 
 /** @author: AndreaCatania */
 
