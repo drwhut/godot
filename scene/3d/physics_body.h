@@ -33,6 +33,7 @@
 
 #include "core/vset.h"
 #include "scene/3d/collision_object.h"
+#include "scene/3d/frame_interpolator.h"
 #include "scene/resources/physics_material.h"
 #include "servers/physics_server.h"
 #include "skeleton.h"
@@ -146,6 +147,8 @@ protected:
 	int max_contacts_reported;
 
 	bool custom_integrator;
+
+	FrameInterpolator<Transform> frame_interpolator;
 
 	struct ShapePair {
 
