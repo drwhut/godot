@@ -4077,7 +4077,7 @@ void EditorNode::progress_add_task(const String &p_task, const String &p_label, 
 	if (singleton == NULL) {
 		return;
 	}
-	
+
 	if (singleton->cmdline_export_mode) {
 		print_line(p_task + ": begin: " + p_label + " steps: " + itos(p_steps));
 	} else {
@@ -4090,7 +4090,7 @@ bool EditorNode::progress_task_step(const String &p_task, const String &p_state,
 	if (singleton == NULL) {
 		return false;
 	}
-	
+
 	if (singleton->cmdline_export_mode) {
 		print_line("\t" + p_task + ": step " + itos(p_step) + ": " + p_state);
 		return false;
@@ -4105,7 +4105,7 @@ void EditorNode::progress_end_task(const String &p_task) {
 	if (singleton == NULL) {
 		return;
 	}
-	
+
 	if (singleton->cmdline_export_mode) {
 		print_line(p_task + ": end");
 	} else {
