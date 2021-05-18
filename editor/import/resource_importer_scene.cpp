@@ -31,7 +31,10 @@
 #include "resource_importer_scene.h"
 
 #include "core/io/resource_saver.h"
+#include "core/os/dir_access.h"
+#ifdef TOOLS_ENABLED
 #include "editor/editor_node.h"
+#endif
 #include "scene/3d/collision_shape.h"
 #include "scene/3d/mesh_instance.h"
 #include "scene/3d/navigation.h"
@@ -1269,8 +1272,10 @@ Error ResourceImporterScene::import(const String &p_source_file, const String &p
 	Ref<EditorSceneImporter> importer;
 	String ext = src_path.get_extension().to_lower();
 
+#ifdef TOOLS_ENABLED
 	EditorProgress progress("import", TTR("Import Scene"), 104);
 	progress.step(TTR("Importing Scene..."), 0);
+#endif
 
 	for (Set<Ref<EditorSceneImporter> >::Element *E = importers.front(); E; E = E->next()) {
 
@@ -1453,7 +1458,9 @@ Error ResourceImporterScene::import(const String &p_source_file, const String &p
 
 		Map<String, unsigned int> used_meshes;
 
+#ifdef TOOLS_ENABLED
 		EditorProgress progress2("gen_lightmaps", TTR("Generating Lightmaps"), meshes.size());
+#endif
 		int step = 0;
 		for (Map<Ref<ArrayMesh>, Transform>::Element *E = meshes.front(); E; E = E->next()) {
 
@@ -1463,7 +1470,9 @@ Error ResourceImporterScene::import(const String &p_source_file, const String &p
 				name = "Mesh " + itos(step);
 			}
 
+#ifdef TOOLS_ENABLED
 			progress2.step(TTR("Generating for Mesh: ") + name + " (" + itos(step) + "/" + itos(meshes.size()) + ")", step);
+#endif
 
 			int *ret_cache_data = cache_data;
 			unsigned int ret_cache_size = cache_size;
@@ -1471,7 +1480,11 @@ Error ResourceImporterScene::import(const String &p_source_file, const String &p
 			Error err2 = mesh->lightmap_unwrap_cached(ret_cache_data, ret_cache_size, ret_used_cache, E->get(), texel_size);
 
 			if (err2 != OK) {
+#ifdef TOOLS_ENABLED
 				EditorNode::add_io_error("Mesh '" + name + "' failed lightmap generation. Please fix geometry.");
+#else
+				print_error("Mesh '" + name + "' failed lightmap generation. Please fix geometry.");
+#endif
 			} else {
 
 				String hash = String::md5((unsigned char *)ret_cache_data);
@@ -1552,7 +1565,9 @@ Error ResourceImporterScene::import(const String &p_source_file, const String &p
 		_make_external_resources(scene, base_path, external_animations, external_animations_as_text, keep_custom_tracks, external_materials, external_materials_as_text, keep_materials, external_meshes, external_meshes_as_text, anim_map, mat_map, mesh_map);
 	}
 
+#ifdef TOOLS_ENABLED
 	progress.step(TTR("Running Custom Script..."), 2);
+#endif
 
 	String post_import_script_path = p_options["nodes/custom_script"];
 	Ref<EditorScenePostImport> post_import_script;
@@ -1560,13 +1575,21 @@ Error ResourceImporterScene::import(const String &p_source_file, const String &p
 	if (post_import_script_path != "") {
 		Ref<Script> scr = ResourceLoader::load(post_import_script_path);
 		if (!scr.is_valid()) {
+#ifdef TOOLS_ENABLED
 			EditorNode::add_io_error(TTR("Couldn't load post-import script:") + " " + post_import_script_path);
+#else
+			print_error("Couldn't load post-import script: " + post_import_script_path);
+#endif
 		} else {
 
 			post_import_script = Ref<EditorScenePostImport>(memnew(EditorScenePostImport));
 			post_import_script->set_script(scr.get_ref_ptr());
 			if (!post_import_script->get_script_instance()) {
+#ifdef TOOLS_ENABLED
 				EditorNode::add_io_error(TTR("Invalid/broken script for post-import (check console):") + " " + post_import_script_path);
+#else
+				print_error("Invalid/broken script for post-import (check console): " + post_import_script_path);
+#endif
 				post_import_script.unref();
 				return ERR_CANT_CREATE;
 			}
@@ -1577,14 +1600,22 @@ Error ResourceImporterScene::import(const String &p_source_file, const String &p
 		post_import_script->init(base_path, p_source_file);
 		scene = post_import_script->post_import(scene);
 		if (!scene) {
+#ifdef TOOLS_ENABLED
 			EditorNode::add_io_error(
 					TTR("Error running post-import script:") + " " + post_import_script_path + "\n" +
 					TTR("Did you return a Node-derived object in the `post_import()` method?"));
+#else
+			print_error(
+					"Error running post-import script: " + post_import_script_path + "\n" +
+					"Did you return a Node-derived object in the `post_import()` method?");
+#endif
 			return err;
 		}
 	}
 
+#ifdef TOOLS_ENABLED
 	progress.step(TTR("Saving..."), 104);
+#endif
 
 	if (external_scenes) {
 		//save sub-scenes as instances!
