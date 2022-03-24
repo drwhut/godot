@@ -47,7 +47,6 @@
 
 template <class T>
 class FrameInterpolator {
-
 	T next_data;
 	T current_data;
 	real_t time_ahead = 0.0;
@@ -96,7 +95,6 @@ public:
 template <class T>
 void FrameInterpolator<T>::reset(
 		const T &p_current) {
-
 	next_data = p_current;
 	current_data = p_current;
 	time_ahead = 0.0;
@@ -122,7 +120,6 @@ T FrameInterpolator<T>::get_next_frame_data(real_t p_delta) {
 	p_delta = MAX(p_delta, CMP_EPSILON);
 
 	if (time_ahead > 0.0) {
-
 		if (unlikely(time_ahead > (real_t(fallback_amount) * last_insert_delta_time))) {
 			// Move the timeline forward till the 20% fallback.
 			p_delta = time_ahead - (real_t(fallback_amount) * 0.2 * last_insert_delta_time);

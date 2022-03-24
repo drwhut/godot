@@ -453,7 +453,6 @@ void RigidBody::_direct_state_changed(Object *p_state) {
 }
 
 void RigidBody::_notification(int p_what) {
-
 	switch (p_what) {
 		case NOTIFICATION_INTERNAL_PROCESS: {
 			const real_t delta = get_process_delta_time();
