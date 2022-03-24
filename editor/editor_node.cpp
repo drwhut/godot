@@ -4079,7 +4079,7 @@ void EditorNode::progress_add_task_bg(const String &p_task, const String &p_labe
 	if (singleton == NULL) {
 		return;
 	}
-	
+
 	singleton->progress_hb->add_task(p_task, p_label, p_steps);
 }
 
