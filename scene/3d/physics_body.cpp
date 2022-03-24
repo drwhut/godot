@@ -356,8 +356,8 @@ void RigidBody::_direct_state_changed(Object *p_state) {
 	state = Object::cast_to<PhysicsDirectBodyState>(p_state);
 	ERR_FAIL_COND_MSG(!state, "Method '_direct_state_changed' must receive a valid PhysicsDirectBodyState object as argument");
 
-	set_ignore_transform_notification(true);
-	set_global_transform(state->get_transform());
+	frame_interpolator.push_data(state->get_transform(), get_physics_process_delta_time());
+
 	linear_velocity = state->get_linear_velocity();
 	angular_velocity = state->get_angular_velocity();
 	inverse_inertia_tensor = state->get_inverse_inertia_tensor();
@@ -368,7 +368,6 @@ void RigidBody::_direct_state_changed(Object *p_state) {
 	if (get_script_instance()) {
 		get_script_instance()->call("_integrate_forces", state);
 	}
-	set_ignore_transform_notification(false);
 	_on_transform_changed();
 
 	if (contact_monitor) {
@@ -454,20 +453,34 @@ void RigidBody::_direct_state_changed(Object *p_state) {
 }
 
 void RigidBody::_notification(int p_what) {
+
+	switch (p_what) {
+		case NOTIFICATION_INTERNAL_PROCESS: {
+			const real_t delta = get_process_delta_time();
+			set_ignore_transform_notification(true);
+			set_global_transform(frame_interpolator.get_next_frame_data(delta));
+			set_ignore_transform_notification(false);
+		} break;
+		case NOTIFICATION_TRANSFORM_CHANGED:
+		case NOTIFICATION_READY:
+			if (Engine::get_singleton()->is_editor_hint() == false) {
+				set_process_internal(true);
+				frame_interpolator.reset(get_global_transform());
+			}
+			break;
 #ifdef TOOLS_ENABLED
-	if (p_what == NOTIFICATION_ENTER_TREE) {
-		if (Engine::get_singleton()->is_editor_hint()) {
-			set_notify_local_transform(true); //used for warnings and only in editor
-		}
-	}
-
-	if (p_what == NOTIFICATION_LOCAL_TRANSFORM_CHANGED) {
-		if (Engine::get_singleton()->is_editor_hint()) {
-			update_configuration_warning();
-		}
-	}
-
+		case NOTIFICATION_ENTER_TREE:
+			if (Engine::get_singleton()->is_editor_hint()) {
+				set_notify_local_transform(true);
+			}
+			break;
+		case NOTIFICATION_LOCAL_TRANSFORM_CHANGED:
+			if (Engine::get_singleton()->is_editor_hint()) {
+				update_configuration_warning();
+			}
+			break;
 #endif
+	}
 }
 
 void RigidBody::set_mode(Mode p_mode) {
