@@ -361,6 +361,10 @@ static Error _parse_obj(const String &p_path, List<Ref<Mesh>> &r_meshes, bool p_
 			}
 
 			if (l.begins_with("o ") || f->eof_reached()) {
+				if (l.begins_with("o ")) {
+					name = l.substr(2, l.length()).strip_edges();
+				}
+
 				if (!p_single_mesh) {
 					mesh->set_name(name);
 					r_meshes.push_back(mesh);
@@ -372,10 +376,6 @@ static Error _parse_obj(const String &p_path, List<Ref<Mesh>> &r_meshes, bool p_
 
 			if (f->eof_reached()) {
 				break;
-			}
-
-			if (l.begins_with("o ")) {
-				name = l.substr(2, l.length()).strip_edges();
 			}
 
 			if (l.begins_with("usemtl ")) {
