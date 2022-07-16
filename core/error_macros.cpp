@@ -31,37 +31,21 @@
 #include "error_macros.h"
 
 #include "core/io/logger.h"
+#include "core/list.h"
 #include "core/ustring.h"
 #include "os/os.h"
 
-static ErrorHandlerList *error_handler_list = nullptr;
+List<ErrorHandlerList *> error_handler_list;
 
 void add_error_handler(ErrorHandlerList *p_handler) {
 	_global_lock();
-	p_handler->next = error_handler_list;
-	error_handler_list = p_handler;
+	error_handler_list.push_back(p_handler);
 	_global_unlock();
 }
 
 void remove_error_handler(ErrorHandlerList *p_handler) {
 	_global_lock();
-
-	ErrorHandlerList *prev = nullptr;
-	ErrorHandlerList *l = error_handler_list;
-
-	while (l) {
-		if (l == p_handler) {
-			if (prev) {
-				prev->next = l->next;
-			} else {
-				error_handler_list = l->next;
-			}
-			break;
-		}
-		prev = l;
-		l = l->next;
-	}
-
+	error_handler_list.erase(p_handler);
 	_global_unlock();
 }
 
@@ -77,10 +61,10 @@ void _err_print_error(const char *p_function, const char *p_file, int p_line, co
 	OS::get_singleton()->print_error(p_function, p_file, p_line, p_error, p_message, (Logger::ErrorType)p_type);
 
 	_global_lock();
-	ErrorHandlerList *l = error_handler_list;
-	while (l) {
-		l->errfunc(l->userdata, p_function, p_file, p_line, p_error, p_message, p_type);
-		l = l->next;
+
+	for (List<ErrorHandlerList *>::Element *E = error_handler_list.front(); E; E = E->next()) {
+		ErrorHandlerList *handler = E->get();
+		handler->errfunc(handler->userdata, p_function, p_file, p_line, p_error, p_message, p_type);
 	}
 
 	_global_unlock();
