@@ -61,6 +61,7 @@ private:
 	bool drag_to_rearrange_enabled;
 	bool use_hidden_tabs_for_min_size;
 	int tabs_rearrange_group;
+	bool rollover;
 
 	Vector<Control *> _get_tabs() const;
 	int _get_tab_width(int p_index) const;
@@ -128,6 +129,9 @@ public:
 	int get_tabs_rearrange_group() const;
 	void set_use_hidden_tabs_for_min_size(bool p_use_hidden_tabs);
 	bool get_use_hidden_tabs_for_min_size() const;
+
+	void set_rollover(bool p_enabled);
+	bool get_rollover() const;
 
 	TabContainer();
 };
