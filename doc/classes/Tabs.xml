@@ -258,7 +258,7 @@
 		<theme_item name="decrement_highlight" data_type="icon" type="Texture">
 			Icon for the left arrow button that appears when there are too many tabs to fit in the container width. Used when the button is being hovered with the cursor.
 		</theme_item>
-		<theme_item name="focus" type="StyleBox">
+		<theme_item name="focus" data_type="style" type="StyleBox">
 			[StyleBox] used on the selected tab when the [Tabs] node is focused. It is displayed over the current [StyleBox], so using [StyleBoxEmpty] will just disable the focus visual effect.
 		</theme_item>
 		<theme_item name="increment" data_type="icon" type="Texture">
