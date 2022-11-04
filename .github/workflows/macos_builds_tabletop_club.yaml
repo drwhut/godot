@@ -1,0 +1,73 @@
+name: 🍎 macOS Builds for Tabletop Club
+on: [push, pull_request]
+
+# Global Settings
+env:
+  GODOT_BASE_BRANCH: 3.3
+  SCONSFLAGS: platform=osx verbose=yes warnings=all werror=yes --jobs=2
+  SCONS_CACHE_LIMIT: 4096
+
+jobs:
+  macos-template:
+    runs-on: "macos-10.15"
+    name: Universal Template
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      # Upload cache on completion and check it out now
+      - name: Load .scons_cache directory
+        id: macos-open-tabletop-cache
+        uses: actions/cache@v2
+        with:
+          path: ${{github.workspace}}/.scons_cache/
+          key: ${{github.job}}-${{env.GODOT_BASE_BRANCH}}-${{github.ref}}-${{github.sha}}
+          restore-keys: |
+            ${{github.job}}-${{env.GODOT_BASE_BRANCH}}-${{github.ref}}-${{github.sha}}
+            ${{github.job}}-${{env.GODOT_BASE_BRANCH}}-${{github.ref}}
+            ${{github.job}}-${{env.GODOT_BASE_BRANCH}}
+
+      # Use python 3.x release (works cross platform)
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v2
+        with:
+          # Semantic version range syntax or exact version of a Python version
+          python-version: '3.x'
+          # Optional - x64 or x86 architecture, defaults to x64
+          architecture: 'x64'
+
+      # You can test your matrix by printing the current Python version
+      - name: Configuring Python packages
+        run: |
+          python -c "import sys; print(sys.version)"
+          python -m pip install scons
+          python --version
+          scons --version
+
+      - name: Compilation
+        env:
+          SCONS_CACHE: ${{github.workspace}}/.scons_cache/
+        run: |
+          scons target=release tools=no arch=x86_64 production=yes
+          scons target=release tools=no arch=arm64 production=yes
+          ls -l bin/
+
+      - name: Creating universal template
+        run: |
+          lipo -create bin/godot.osx.opt.x86_64 bin/godot.osx.opt.arm64 -output bin/godot.osx.opt.universal
+          cp -r misc/dist/osx_template.app bin/osx_template.app
+          mkdir -p bin/osx_template.app/Contents/MacOS
+          cp bin/godot.osx.opt.universal bin/osx_template.app/Contents/MacOS/godot_osx_release.64
+          chmod +x bin/osx_template.app/Contents/MacOS/godot_osx_release.64
+          cd bin/
+          zip -r osx.zip osx_template.app
+          cd ..
+          ls -l bin/
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ${{ github.job }}
+          path: bin/*
+          retention-days: 14
