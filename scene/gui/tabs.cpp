@@ -215,6 +215,63 @@ void Tabs::_gui_input(const Ref<InputEvent> &p_event) {
 			}
 		}
 	}
+	if (!mm.is_valid() && !mb.is_valid()) {
+		if (p_event->is_action_pressed("ui_right")) {
+			int next_tab = get_current_tab() + 1;
+			bool valid = true;
+			while (valid) {
+				if (next_tab == get_current_tab()) {
+					valid = false;
+					break;
+				}
+
+				if (next_tab < get_tab_count()) {
+					if (get_tab_disabled(next_tab)) {
+						++next_tab;
+					} else {
+						break;
+					}
+				} else {
+					if (rollover) {
+						next_tab = 0;
+					} else {
+						valid = false;
+					}
+				}
+			}
+			if (valid) {
+				set_current_tab(next_tab);
+				accept_event();
+			}
+		} else if (p_event->is_action_pressed("ui_left")) {
+			int prev_tab = get_current_tab() - 1;
+			bool valid = true;
+			while (valid) {
+				if (prev_tab == get_current_tab()) {
+					valid = false;
+					break;
+				}
+
+				if (prev_tab >= 0) {
+					if (get_tab_disabled(prev_tab)) {
+						--prev_tab;
+					} else {
+						break;
+					}
+				} else {
+					if (rollover) {
+						prev_tab = get_tab_count() - 1;
+					} else {
+						valid = false;
+					}
+				}
+			}
+			if (valid) {
+				set_current_tab(prev_tab);
+				accept_event();
+			}
+		}
+	}
 }
 
 void Tabs::_notification(int p_what) {
@@ -305,6 +362,11 @@ void Tabs::_notification(int p_what) {
 
 				Rect2 sb_rect = Rect2(w, 0, tabs[i].size_cache, h);
 				sb->draw(ci, sb_rect);
+
+				if (i == current && has_focus()) {
+					Ref<StyleBox> style2 = get_stylebox("focus");
+					style2->draw(ci, sb_rect);
+				}
 
 				w += sb->get_margin(MARGIN_LEFT);
 
@@ -943,6 +1005,14 @@ bool Tabs::get_select_with_rmb() const {
 	return select_with_rmb;
 }
 
+void Tabs::set_rollover(bool p_enabled) {
+	rollover = p_enabled;
+}
+
+bool Tabs::get_rollover() const {
+	return rollover;
+}
+
 void Tabs::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("_gui_input"), &Tabs::_gui_input);
 	ClassDB::bind_method(D_METHOD("_update_hover"), &Tabs::_update_hover);
@@ -978,6 +1048,9 @@ void Tabs::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_select_with_rmb", "enabled"), &Tabs::set_select_with_rmb);
 	ClassDB::bind_method(D_METHOD("get_select_with_rmb"), &Tabs::get_select_with_rmb);
 
+	ClassDB::bind_method(D_METHOD("set_rollover", "enabled"), &Tabs::set_rollover);
+	ClassDB::bind_method(D_METHOD("get_rollover"), &Tabs::get_rollover);
+
 	ADD_SIGNAL(MethodInfo("tab_changed", PropertyInfo(Variant::INT, "tab")));
 	ADD_SIGNAL(MethodInfo("right_button_pressed", PropertyInfo(Variant::INT, "tab")));
 	ADD_SIGNAL(MethodInfo("tab_close", PropertyInfo(Variant::INT, "tab")));
@@ -990,6 +1063,7 @@ void Tabs::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "tab_close_display_policy", PROPERTY_HINT_ENUM, "Show Never,Show Active Only,Show Always"), "set_tab_close_display_policy", "get_tab_close_display_policy");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "scrolling_enabled"), "set_scrolling_enabled", "get_scrolling_enabled");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "drag_to_rearrange_enabled"), "set_drag_to_rearrange_enabled", "get_drag_to_rearrange_enabled");
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "rollover"), "set_rollover", "get_rollover");
 
 	BIND_ENUM_CONSTANT(ALIGN_LEFT);
 	BIND_ENUM_CONSTANT(ALIGN_CENTER);
@@ -1024,6 +1098,8 @@ Tabs::Tabs() {
 	hover = -1;
 	drag_to_rearrange_enabled = false;
 	tabs_rearrange_group = -1;
+	rollover = false;
 
+	set_focus_mode(FOCUS_ALL);
 	connect("mouse_exited", this, "_on_mouse_exited");
 }
