@@ -77,9 +77,14 @@ public:
  * When maximum is reached, the oldest backups are erased. With the maximum being equal to 1,
  * it acts as a simple file logger.
  */
+
+#define MAX_ERR_IN_FILE 100000
+
 class RotatedFileLogger : public Logger {
 	String base_path;
 	int max_files;
+
+	int num_err_logged;
 
 	FileAccess *file;
 

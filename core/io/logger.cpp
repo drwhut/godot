@@ -197,6 +197,7 @@ void RotatedFileLogger::rotate_file() {
 RotatedFileLogger::RotatedFileLogger(const String &p_base_path, int p_max_files) :
 		base_path(p_base_path.simplify_path()),
 		max_files(p_max_files > 0 ? p_max_files : 1),
+		num_err_logged(0),
 		file(nullptr) {
 	rotate_file();
 }
@@ -204,6 +205,13 @@ RotatedFileLogger::RotatedFileLogger(const String &p_base_path, int p_max_files)
 void RotatedFileLogger::logv(const char *p_format, va_list p_list, bool p_err) {
 	if (!should_log(p_err)) {
 		return;
+	}
+
+	if (p_err) {
+		if (num_err_logged > MAX_ERR_IN_FILE) {
+			return;
+		}
+		num_err_logged++;
 	}
 
 	if (file) {
