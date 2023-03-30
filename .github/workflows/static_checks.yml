@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          submodules: recursive
 
       # Azure repositories are not reliable, we need to prevent Azure giving us packages.
       - name: Make apt sources.list use the default Ubuntu repositories
