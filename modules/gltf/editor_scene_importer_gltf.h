@@ -31,8 +31,6 @@
 #ifndef EDITOR_SCENE_IMPORTER_GLTF_H
 #define EDITOR_SCENE_IMPORTER_GLTF_H
 
-#ifdef TOOLS_ENABLED
-
 #include "editor/import/resource_importer_scene.h"
 
 #include "gltf_document.h"
@@ -51,7 +49,5 @@ public:
 	virtual Ref<Animation> import_animation(const String &p_path,
 			uint32_t p_flags, int p_bake_fps);
 };
-
-#endif // TOOLS_ENABLED
 
 #endif // EDITOR_SCENE_IMPORTER_GLTF_H
