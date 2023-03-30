@@ -28,8 +28,6 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
 /**************************************************************************/
 
-#ifdef TOOLS_ENABLED
-
 #include "packed_scene_gltf.h"
 
 #include "editor/import/resource_importer_scene.h"
@@ -155,5 +153,3 @@ Error PackedSceneGLTF::export_gltf(Node *p_root, String p_path,
 	}
 	return OK;
 }
-
-#endif // TOOLS_ENABLED
