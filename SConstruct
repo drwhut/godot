@@ -711,8 +711,7 @@ if selected_platform in platform_list:
     SConscript("core/SCsub")
     SConscript("servers/SCsub")
     SConscript("scene/SCsub")
-    if env["tools"]:
-        SConscript("editor/SCsub")
+    SConscript("editor/SCsub")
     SConscript("drivers/SCsub")
 
     SConscript("platform/SCsub")
