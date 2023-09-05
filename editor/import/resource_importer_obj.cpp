@@ -382,7 +382,7 @@ static Error _parse_obj(const String &p_path, List<Ref<Mesh>> &r_meshes, bool p_
 			}
 
 			if (l.begins_with("o ") || f->eof_reached()) {
-				if (!p_single_mesh) {
+				if (!p_single_mesh && vertices.size() > 0) {
 					mesh->set_name(name);
 					r_meshes.push_back(mesh);
 					mesh.instance();
