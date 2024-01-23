@@ -37,6 +37,7 @@
 #include "core/project_settings.h"
 #include "scene/gui/label.h"
 #include "scene/gui/panel.h"
+#include "scene/gui/scroll_container.h"
 #include "scene/main/canvas_layer.h"
 #include "scene/main/viewport.h"
 #include "scene/scene_string_names.h"
@@ -2308,9 +2309,13 @@ Control *Control::_get_focus_neighbour(Margin p_margin, int p_count) {
 		if (c) {
 			if (c->data.SI) {
 				break;
-			}
-			if (c->data.RI) {
+			} else if (c->data.RI) {
 				break;
+			} else if (Object::cast_to<ScrollContainer>(c->get_parent())) {
+				_window_find_focus_neighbour(vdir, base, points, maxd, dist, &result);
+				if (result) {
+					return result;
+				}
 			}
 		}
 		base = base->get_parent();
