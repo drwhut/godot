@@ -91,6 +91,10 @@ void WebSocketClient::_on_peer_packet() {
 	}
 }
 
+void WebSocketClient::_on_ping_packet() {
+	emit_signal("ping_received");
+}
+
 void WebSocketClient::_on_connect(String p_protocol) {
 	if (_is_multiplayer) {
 		// need to wait for ID confirmation...
@@ -135,6 +139,7 @@ void WebSocketClient::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "trusted_ssl_certificate", PROPERTY_HINT_RESOURCE_TYPE, "X509Certificate", 0), "set_trusted_ssl_certificate", "get_trusted_ssl_certificate");
 
 	ADD_SIGNAL(MethodInfo("data_received"));
+	ADD_SIGNAL(MethodInfo("ping_received"));
 	ADD_SIGNAL(MethodInfo("connection_established", PropertyInfo(Variant::STRING, "protocol")));
 	ADD_SIGNAL(MethodInfo("server_close_request", PropertyInfo(Variant::INT, "code"), PropertyInfo(Variant::STRING, "reason")));
 	ADD_SIGNAL(MethodInfo("connection_closed", PropertyInfo(Variant::BOOL, "was_clean_close")));

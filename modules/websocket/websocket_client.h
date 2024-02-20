@@ -65,6 +65,7 @@ public:
 	virtual ConnectionStatus get_connection_status() const = 0;
 
 	void _on_peer_packet();
+	void _on_ping_packet();
 	void _on_connect(String p_protocol);
 	void _on_close_request(int p_code, String p_reason);
 	void _on_disconnect(bool p_was_clean);
