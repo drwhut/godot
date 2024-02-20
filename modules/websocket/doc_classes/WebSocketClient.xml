@@ -82,6 +82,11 @@
 				[b]Note:[/b] This signal is [i]not[/i] emitted when used as high-level multiplayer peer.
 			</description>
 		</signal>
+		<signal name="ping_received">
+			<description>
+				Emitted when a ping packet is received.
+			</description>
+		</signal>
 		<signal name="server_close_request">
 			<argument index="0" name="code" type="int" />
 			<argument index="1" name="reason" type="String" />
