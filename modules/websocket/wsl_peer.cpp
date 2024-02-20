@@ -194,6 +194,10 @@ Error WSLPeer::parse_message(const wslay_event_on_msg_recv_arg *arg) {
 		return ERR_FILE_EOF;
 	} else if (arg->opcode != WSLAY_BINARY_FRAME) {
 		// Ping or pong
+		if (!_data->is_server) {
+			WSLClient *helper = (WSLClient *)_data->obj;
+			helper->_on_ping_packet();
+		}
 		return ERR_SKIP;
 	}
 	_in_buffer.write_packet(arg->msg, arg->msg_length, &is_string);
