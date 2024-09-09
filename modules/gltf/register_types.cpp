@@ -35,7 +35,9 @@
 #include "extensions/gltf_document_extension.h"
 #include "extensions/gltf_spec_gloss.h"
 #include "extensions/physics/gltf_document_extension_physics.h"
+#include "gltf_document.h"
 #include "gltf_state.h"
+#include "packed_scene_gltf.h"
 
 #ifdef TOOLS_ENABLED
 #include "editor/editor_node.h"
