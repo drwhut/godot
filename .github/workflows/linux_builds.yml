@@ -29,6 +29,7 @@ jobs:
             bin: "./bin/godot.x11.opt.tools.64.mono"
             build-mono: true
             artifact: true
+            submodules: recursive
 
           - name: Editor and sanitizers (target=debug, tools=yes, use_asan=yes, use_ubsan=yes, linker=gold)
             cache-name: linux-editor-sanitizers
@@ -40,6 +41,7 @@ jobs:
             build-mono: false
             # Skip 2GiB artifact speeding up action.
             artifact: false
+            submodules: false
 
           - name: Template w/ Mono (target=release, tools=no)
             cache-name: linux-template-mono
@@ -48,6 +50,7 @@ jobs:
             sconsflags: module_mono_enabled=yes mono_static=yes mono_glue=no debug_symbols=no
             build-mono: false
             artifact: true
+            submodules: recursive
 
           - name: Minimal template (target=release, tools=no, everything disabled)
             cache-name: linux-template-minimal
@@ -56,11 +59,12 @@ jobs:
             sconsflags: modules_enabled_by_default=no disable_3d=yes disable_advanced_gui=yes deprecated=no minizip=no debug_symbols=no
             build-mono: false
             artifact: false
+            submodules: recursive
 
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: recursive
+          submodules: ${{ matrix.submodules }}
 
       - name: Linux dependencies
         shell: bash
