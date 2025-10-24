@@ -1,0 +1,3 @@
+[submodule "modules/tabletop_club_godot_module"]
+	path = modules/tabletop_club_godot_module
+	url = https://github.com/drwhut/tabletop_club_godot_module.git
